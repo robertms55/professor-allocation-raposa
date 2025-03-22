@@ -3,6 +3,9 @@ package com.project.professor.allocation.entity;
 import java.sql.Time;
 import java.time.DayOfWeek;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Allocation {
 
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -30,17 +34,29 @@ public class Allocation {
 	@Column(nullable = false)
 	private DayOfWeek day;
 	
-	@Column(nullable = false)
+	@Schema(example = "08:00:00", type = "string")
+	@Column(name = "startHour", nullable = false)
 	private Time start;
 	
-	@Column(nullable = false)
+	@Schema(example = "17:00:00", type = "string")
+	@Column(name = "endHour", nullable = false)
 	private Time end;
 	
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "professor_id", nullable = false)
 	private Professor professor;
+	public void setProfessorId(Long professorId) {
+		this.professor = new Professor();
+		this.course.setId(professorId);
+	}
 	
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
+	public void setCourseId(Long courseId) {
+		this.course = new Course();
+		this.course.setId(courseId);
+	}
 }
