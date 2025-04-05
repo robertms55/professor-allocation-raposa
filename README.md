@@ -22,7 +22,7 @@ Esta é uma API REST desenvolvida com **Spring Boot** para realizar o **CRUD com
 - **H2 Database**
 - **Swagger / OpenAPI 3 (springdoc-openapi)**
 - **Maven**
-- **Lombock**
+- **Lombok**
 
 ---
 
