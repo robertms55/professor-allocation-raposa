@@ -2,6 +2,8 @@ package com.project.professor.allocation.controller;
 
 import com.project.professor.allocation.entity.Professor;
 import com.project.professor.allocation.repository.*;
+import com.project.professor.allocation.service.ProfessorService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,9 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping(path = "/professors")
 public class ProfessorController {
 private final ProfessorRepository repository;
-public ProfessorController (ProfessorRepository repository){
+private final ProfessorService service;
+public ProfessorController (ProfessorRepository repository,ProfessorService service){
     super();
     this.repository = repository;
+    this.service = service;
 }
 
     @Operation(summary = "Find a professor ")
@@ -31,7 +35,7 @@ public ProfessorController (ProfessorRepository repository){
 
     @GetMapping(path = "/{professor_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> findById(@PathVariable(name = "professor_id") Long id) {
-        Professor professor = repository.findById(id).orElse(null);
+        Professor professor = service.findById(id);
         if (professor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -47,7 +51,7 @@ public ProfessorController (ProfessorRepository repository){
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Professor> save(@RequestBody Professor professor) {
         try {
-            professor = repository.save(professor);
+            professor = service.save(professor);
             return new ResponseEntity<>(professor, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -66,7 +70,7 @@ public ProfessorController (ProfessorRepository repository){
                                              @RequestBody Professor professor) {
         professor.setId(id);
         try {
-            professor = repository.save(professor);
+            professor = service.update(professor);
             if (professor == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -84,17 +88,18 @@ public ProfessorController (ProfessorRepository repository){
         })
         @DeleteMapping(path = "/{professor_id}")
         public ResponseEntity<Void> deleteById(@PathVariable(name = "professor_id") Long id) {
-            repository.deleteById(id);
+            service.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
+        
         @Operation(summary = "Delete all professors")
         @ApiResponses({
                 @ApiResponse(responseCode = "204", description = "No Content")
         })
         @DeleteMapping
         public ResponseEntity<Void> deleteAll() {
-            repository.deleteAll();
+            service.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
