@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Professor {
 	
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,5 +32,13 @@ public class Professor {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "department_id", nullable = false)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Department department;
+	
+	
+	public void setDepartmentId(Long Id) {
+		this.department = new Department();
+		this.department.setId(Id);
+		
+	}
 }
