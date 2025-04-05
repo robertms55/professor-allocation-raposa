@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +32,6 @@ public class ProfessorController {
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "OK"),
 			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Not Found", content = @Content) })
-
 	@GetMapping(path = "/{professor_id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Professor> findById(@PathVariable(name = "professor_id") Long id) {
 		Professor professor = service.findById(id);
@@ -38,6 +40,23 @@ public class ProfessorController {
 		} else {
 			return new ResponseEntity<>(professor, HttpStatus.OK);
 		}
+	}
+
+	@Operation(summary = "Find all professors")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "OK") })
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Professor>> findAll(@RequestParam(name = "name", required = false) String name) {
+		List<Professor> professors = service.findAll(name);
+		return new ResponseEntity<>(professors, HttpStatus.OK);
+	}
+
+	@Operation(summary = "Find professors by department")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "OK"),
+			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content) })
+	@GetMapping(path = "/department/{department_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Professor>> findByDepartment(@PathVariable(name = "department_id") Long id) {
+		List<Professor> professors = service.findByDepartment(id);
+		return new ResponseEntity<>(professors, HttpStatus.OK);
 	}
 
 	@Operation(summary = "Save a professor")
