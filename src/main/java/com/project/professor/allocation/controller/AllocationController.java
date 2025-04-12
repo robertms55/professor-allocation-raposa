@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.project.professor.allocation.entity.Allocation;
 import com.project.professor.allocation.repository.AllocationRepository;
+import com.project.professor.allocation.service.AllocationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,10 +31,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class AllocationController {
 
     private final AllocationRepository repository;
+    private final AllocationService service;
 
-    public AllocationController(AllocationRepository repository) {
+    public AllocationController(AllocationRepository repository, AllocationService service) {
         super();
         this.repository = repository;
+        this.service = service;
     }
 
     @Operation(summary = "Find all allocations")
@@ -42,8 +45,8 @@ public class AllocationController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Allocation>> findAll() {
-        List<Allocation> allocations = repository.findAll();
-        return new ResponseEntity<>(allocations, HttpStatus.OK);
+        List<Allocation> allocations = service.findAll();
+        return new ResponseEntity<List<Allocation>>(allocations, HttpStatus.OK);
     }
 
     @Operation(summary = "Find an allocation")
@@ -54,7 +57,7 @@ public class AllocationController {
     })
     @GetMapping(path = "/{allocation_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Allocation> findById(@PathVariable(name = "allocation_id") Long id) {
-        Allocation allocation = repository.findById(id).orElse(null);
+        Allocation allocation = service.findById(id);
         if (allocation == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -70,7 +73,7 @@ public class AllocationController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Allocation> save(@RequestBody Allocation allocation) {
         try {
-            allocation = repository.save(allocation);
+            allocation = service.save(allocation);
             return new ResponseEntity<>(allocation, HttpStatus.CREATED);
         } catch (Exception e) {
         	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -88,7 +91,7 @@ public class AllocationController {
                                              @RequestBody Allocation allocation) {
         allocation.setId(id);
         try {
-            allocation = repository.save(allocation);
+            allocation = service.update(allocation);
             if (allocation == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -106,7 +109,7 @@ public class AllocationController {
     })
     @DeleteMapping(path = "/{allocation_id}")
     public ResponseEntity<Void> deleteById(@PathVariable(name = "allocation_id") Long id) {
-        repository.deleteById(id);
+        service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -116,7 +119,7 @@ public class AllocationController {
     })
     @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
-        repository.deleteAll();
+        service.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
