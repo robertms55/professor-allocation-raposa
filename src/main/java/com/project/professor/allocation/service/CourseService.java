@@ -7,6 +7,8 @@ import com.project.professor.allocation.repository.AllocationRepository;
 import com.project.professor.allocation.repository.CourseRepository;
 import com.project.professor.allocation.repository.DepartmentRepository;
 
+import java.util.List;
+
 @Service
 public class CourseService {
 
@@ -22,4 +24,46 @@ public class CourseService {
 		return repository.findById(id).orElse(null);
 	}
 
+	public List<Course> findAll(String name) {
+
+		if (name == null) {
+			return repository.findAll();
+		} else {
+			return repository.findByNameContainingIgnoreCase(name);
+		}
+
+
+	}
+
+	public Course save(Course course) {
+
+		course.setId(null);
+		return repository.save(course);
+
+
+	}
+
+	public Course update(Course course) {
+		Long id = course.getId();
+		if (id != null && repository.existsById(id)) {
+			return repository.save(course);
+		} else {
+			return null;
+		}
+
+	}
+
+	public void deleteById(Long id) {
+
+
+		if (id != null && repository.existsById(id)) {
+			repository.deleteById(id);
+		}
+	}
+
+	public void deleteAll() {
+
+		repository.deleteAllInBatch();
+
+	}
 }
