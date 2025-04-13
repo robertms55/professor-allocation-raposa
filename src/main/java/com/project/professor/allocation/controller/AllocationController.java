@@ -30,12 +30,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping(path = "/allocations")
 public class AllocationController {
 
-    private final AllocationRepository repository;
     private final AllocationService service;
 
-    public AllocationController(AllocationRepository repository, AllocationService service) {
+    public AllocationController( AllocationService service) {
         super();
-        this.repository = repository;
         this.service = service;
     }
 
