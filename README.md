@@ -17,7 +17,7 @@ Esta é uma API REST desenvolvida com **Spring Boot** para realizar o **CRUD com
 ## 🧱 Tecnologias Utilizadas
 
 - **Java 17+**
-- **Spring Boot 21**
+- **Spring Boot**
 - **Spring Data JPA**
 - **H2 Database**
 - **Swagger / OpenAPI 3 (springdoc-openapi)**
