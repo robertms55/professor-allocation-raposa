@@ -43,7 +43,7 @@
 <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
-    <version>1.18.36</version>
+    <!-- Não precisa de versão, pois pode ser pego a versão do pom.xml "pai" <version>1.18.36</version>  -->
     <scope>provided</scope>
 </dependency>
 

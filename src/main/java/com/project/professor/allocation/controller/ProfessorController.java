@@ -1,7 +1,6 @@
 package com.project.professor.allocation.controller;
 
 import com.project.professor.allocation.entity.Professor;
-import com.project.professor.allocation.repository.*;
 import com.project.professor.allocation.service.ProfessorService;
 
 import io.swagger.v3.oas.annotations.Operation;

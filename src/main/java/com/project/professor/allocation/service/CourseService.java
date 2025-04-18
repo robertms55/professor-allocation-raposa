@@ -1,13 +1,11 @@
 package com.project.professor.allocation.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.project.professor.allocation.entity.Course;
-import com.project.professor.allocation.repository.AllocationRepository;
 import com.project.professor.allocation.repository.CourseRepository;
-import com.project.professor.allocation.repository.DepartmentRepository;
-
-import java.util.List;
 
 @Service
 public class CourseService {
