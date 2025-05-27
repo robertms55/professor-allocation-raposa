@@ -48,7 +48,7 @@ public class Allocation {
 	private Professor professor;
 	public void setProfessorId(Long professorId) {
 		this.professor = new Professor();
-		this.course.setId(professorId);
+		this.professor.setId(professorId);
 	}
 	
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
